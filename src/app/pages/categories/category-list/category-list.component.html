@@ -1,3 +1,59 @@
-<p>
-  category-list works!
-</p>
+<div class="container">
+  <nav class="breadcrumb" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Categorias</li>
+    </ol>
+  </nav>
+  <div class="container__content">
+    <div class="row">
+      <div class="col-md">
+        <h1 class="h2 border-left pl-2">Categorias</h1>
+      </div>
+      <div class="col-md">
+        <a class="btn btn-success float-right" routerLink="new">+ Nova categoria</a>
+      </div>
+    </div>
+
+    <table class="table table-hover mt-3">
+      <thead>
+        <tr class="bg-dark text-light">
+          <th>Categoria</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <strong>Lazer</strong><br/>
+            <small>Ciname, parque, praia, etc</small>
+          </td>
+          <td>
+            <a [routerLink]="[12, 'edit']" class="btn btn-outline-info btn-sm mr-2">Editar</a>
+            <a (click)="alert('excluir')" class="btn btn-outline-danger btn-sm">Excluir</a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong>Boletos</strong><br/>
+            <small>Água, luz, Internet, etc</small>
+          </td>
+          <td>
+            <a [routerLink]="[12, 'edit']" class="btn btn-outline-info btn-sm mr-2">Editar</a>
+            <a (click)="alert('excluir')" class="btn btn-outline-danger btn-sm">Excluir</a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong>Estudos</strong><br/>
+            <small>Escolas, faculdades, cursos, etc</small>
+          </td>
+          <td>
+            <a [routerLink]="[12, 'edit']" class="btn btn-outline-info btn-sm mr-2">Editar</a>
+            <a (click)="alert('excluir')" class="btn btn-outline-danger btn-sm">Excluir</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
