@@ -7,7 +7,7 @@ import { CategoryService } from '../shared/category.service';
 
 import { switchMap } from 'rxjs/operators';
 
-import toastr from 'toastr';
+import toaster from 'toastr';
 
 @Component({
   selector: 'app-category-form',
@@ -41,6 +41,14 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
     this.setPageTitle();
   }
 
+  public submitForm():void {
+    this.submittingForm = true;
+    if (this.currentAction == "new") {
+      this.createCategory();
+    } else {
+      this.updateCategory();
+    }
+  }
 
   private setCurrentAction():void {
     if (this.route.snapshot.url[0].path == 'new') {
@@ -79,6 +87,43 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
     } else {
       const categoryName = this.category.name || '';
       this.pageTitle = `Editando categoria: ${categoryName}`
+    }
+  }
+
+  private createCategory():void {
+    const category: Category = Object.assign((new Category), this.categoryForm.value); //create a new object with forms data
+
+    this.categoryService.create(category).subscribe(
+      (category) => this.actionsForSuccess(category),
+      (error) => this.actionsForError(error)
+    )
+  }
+
+  private updateCategory():void {
+    const category: Category = Object.assign((new Category), this.categoryForm.value); //create a new object with forms data
+
+    this.categoryService.update(category).subscribe(
+      (category) => this.actionsForSuccess(category),
+      (error) => this.actionsForError(error)
+    )
+  }
+
+  private actionsForSuccess(category: Category):void {
+    toaster.success("Solicitação processada com sucesso!");
+    //Redirect/Reload component page
+    this.router
+      .navigateByUrl("categories", {skipLocationChange: true}).then(
+        () => this.router.navigate(["categories", category.id, "edit"])
+      );
+  }
+
+  private actionsForError(error:any):void {
+    toaster.error("Ocorreu um erro ao processar a sua solicitação :(");
+    this.submittingForm = false;
+    if (error.status == 422) { //422: resource error process
+      this.serverErrorMessages = JSON.parse(error._body).errors; // to backend in Rails. Example return ["Nome já existe", "E-mail já cadastrado"]
+    } else {
+      this.serverErrorMessages = ["Falha na comunicação com o servidor. Por favor, tente mais tarde"]; //default message
     }
   }
 
